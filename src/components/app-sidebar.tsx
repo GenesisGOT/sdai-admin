@@ -4,7 +4,7 @@ import * as React from "react"
 import {
   LayoutDashboard, Users, Settings, CreditCard,
   BarChart3, MessageSquare, Bot, LayoutTemplate,
-  UserPlus,
+  UserPlus, Workflow,
 } from "lucide-react"
 import { Link } from "react-router-dom"
 import { NavMain } from "@/components/nav-main"
@@ -33,9 +33,10 @@ const navGroups = [
   {
     label: "Agents",
     items: [
-      { title: "Templates",    url: "/admin/templates",  icon: LayoutTemplate },
-      { title: "All Agents",   url: "/admin",            icon: Bot },
-      { title: "Replies",      url: "/admin/replies",    icon: MessageSquare },
+      { title: "LangFlow Builder", url: "/langflow",         icon: Workflow },
+      { title: "Templates",        url: "/admin/templates",  icon: LayoutTemplate },
+      { title: "All Agents",       url: "/admin",            icon: Bot },
+      { title: "Replies",          url: "/admin/replies",    icon: MessageSquare },
     ],
   },
   {

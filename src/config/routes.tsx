@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 
 const AdminHome       = lazy(() => import('@/app/admin/page'))
+const LangFlow        = lazy(() => import('@/app/langflow/page'))
 const AdminClient     = lazy(() => import('@/app/admin/clients/page'))
 const AdminReplies    = lazy(() => import('@/app/admin/replies/page'))
 const AdminContacts   = lazy(() => import('@/app/admin/contacts/page'))
@@ -42,6 +43,7 @@ export const routes: RouteConfig[] = [
   { path: "/admin/invitations",      element: <ProtectedRoute><AdminInvitations /></ProtectedRoute> },
   { path: "/admin/analytics",        element: <ProtectedRoute><AdminAnalytics /></ProtectedRoute> },
   { path: "/admin/templates",        element: <ProtectedRoute><AdminTemplates /></ProtectedRoute> },
+  { path: "/langflow",               element: <ProtectedRoute><LangFlow /></ProtectedRoute> },
 
   // Settings
   { path: "/settings/user",          element: <ProtectedRoute><UserSettings /></ProtectedRoute> },
