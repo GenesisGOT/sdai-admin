@@ -18,7 +18,7 @@ export function UnderMaintenanceError() {
         <h2 className="mb-3 text-2xl font-semibold">Under Maintenance</h2>
         <p>The service is currently unavailable. Please try again later.</p>
         <div className='mt-6 flex items-center justify-center gap-4 md:mt-8'>
-          <Button className='cursor-pointer' onClick={() => navigate('/dashboard')}>Go Back Home</Button>
+          <Button className='cursor-pointer' onClick={() => navigate('/admin')}>Go Back Home</Button>
           <Button variant='outline' className='flex cursor-pointer items-center gap-1' onClick={() => navigate('#')}>
             Contact Us
           </Button>

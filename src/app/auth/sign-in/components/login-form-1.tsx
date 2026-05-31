@@ -49,7 +49,7 @@ export function LoginForm1({
     setError(null)
     try {
       await login(data.email, data.password)
-      navigate("/dashboard")
+      navigate("/admin")
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Login failed")
     }

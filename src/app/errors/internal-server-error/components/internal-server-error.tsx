@@ -18,7 +18,7 @@ export function InternalServerError() {
         <h2 className="mb-3 text-2xl font-semibold">Internal Server Error</h2>
         <p>Something went wrong on our end. We're working to fix the issue. Please try again later.</p>
         <div className='mt-6 flex items-center justify-center gap-4 md:mt-8'>
-          <Button className='cursor-pointer' onClick={() => navigate('/dashboard')}>Go Back Home</Button>
+          <Button className='cursor-pointer' onClick={() => navigate('/admin')}>Go Back Home</Button>
           <Button variant='outline' className='flex cursor-pointer items-center gap-1' onClick={() => navigate('')}>
             Contact Us
           </Button>
