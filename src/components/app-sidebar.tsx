@@ -4,7 +4,7 @@ import * as React from "react"
 import {
   LayoutDashboard, Users, Settings, CreditCard,
   BarChart3, MessageSquare, Bot, LayoutTemplate,
-  UserPlus, Workflow, ClipboardList, Webhook,
+  UserPlus, Workflow, ClipboardList, Webhook, HeartPulse,
 } from "lucide-react"
 import { Link } from "react-router-dom"
 import { NavMain } from "@/components/nav-main"
@@ -18,8 +18,9 @@ const navGroups = [
   {
     label: "Overview",
     items: [
-      { title: "Dashboard",   url: "/admin",            icon: LayoutDashboard },
-      { title: "Analytics",   url: "/admin/analytics",  icon: BarChart3 },
+      { title: "Dashboard",     url: "/admin",            icon: LayoutDashboard },
+      { title: "Client Health", url: "/health",           icon: HeartPulse },
+      { title: "Analytics",     url: "/admin/analytics",  icon: BarChart3 },
     ],
   },
   {
