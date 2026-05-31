@@ -1,62 +1,60 @@
 "use client"
 
-import { useState } from "react"
-import { Workflow, ExternalLink, RefreshCcw, Bot } from "lucide-react"
+import { Workflow, ExternalLink, SquareArrowOutUpRight, Bot } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { BaseLayout } from "@/components/layouts/base-layout"
 
 const LANGFLOW_URL = import.meta.env.VITE_LANGFLOW_URL ?? ""
 
 export default function LangFlowPage() {
-  const [reloadKey, setReloadKey] = useState(0)
-
   function popOut() {
     window.open(
       LANGFLOW_URL,
       "langflow",
-      "width=1400,height=900,menubar=no,toolbar=no,location=no,status=no",
+      "width=1500,height=950,menubar=no,toolbar=no,location=no,status=no",
     )
   }
 
   return (
     <BaseLayout title="LangFlow — Agent Builder" description="Build and manage AI agent flows">
       <div className="px-4 lg:px-6">
-        {!LANGFLOW_URL ? (
-          <div className="flex h-[60vh] flex-col items-center justify-center gap-3 text-center">
-            <Bot className="size-12 text-muted-foreground" />
-            <p className="text-lg font-semibold">LangFlow not configured</p>
-            <p className="max-w-sm text-sm text-muted-foreground">
-              Set <code className="rounded bg-muted px-1 text-xs">VITE_LANGFLOW_URL</code> in the environment variables.
-            </p>
+        <div className="mx-auto max-w-2xl rounded-2xl border bg-card p-10 text-center shadow-sm">
+          <div className="mx-auto mb-6 flex size-16 items-center justify-center rounded-2xl bg-primary/10">
+            <Workflow className="size-8 text-primary" />
           </div>
-        ) : (
-          <div className="flex flex-col overflow-hidden rounded-xl border bg-card">
-            {/* Toolbar */}
-            <div className="flex items-center justify-between border-b bg-muted/30 px-3 py-2">
-              <div className="flex items-center gap-2 text-sm font-medium">
-                <Workflow className="size-4 text-primary" />
-                Agent Builder
-              </div>
-              <div className="flex items-center gap-1">
-                <Button variant="ghost" size="sm" onClick={() => setReloadKey(k => k + 1)}>
-                  <RefreshCcw className="mr-1.5 size-3.5" />Reload
-                </Button>
-                <Button variant="ghost" size="sm" onClick={popOut}>
-                  <ExternalLink className="mr-1.5 size-3.5" />Pop out
-                </Button>
-              </div>
+          <h2 className="text-2xl font-semibold">LangFlow Agent Builder</h2>
+          <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
+            Build, test, and deploy complex AI agent flows visually. Opens in its
+            own window so you can keep the admin panel open alongside it. No login
+            required — you go straight into the builder.
+          </p>
+
+          {LANGFLOW_URL ? (
+            <div className="mt-7 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+              <Button size="lg" className="gap-2" onClick={popOut}>
+                <SquareArrowOutUpRight className="size-4" />
+                Open Builder (window)
+              </Button>
+              <Button size="lg" variant="outline" className="gap-2" asChild>
+                <a href={LANGFLOW_URL} target="_blank" rel="noopener noreferrer">
+                  <ExternalLink className="size-4" />
+                  Open in new tab
+                </a>
+              </Button>
             </div>
-            {/* Embedded LangFlow — fills the content area, sidebar stays visible */}
-            <iframe
-              key={reloadKey}
-              src={LANGFLOW_URL}
-              title="LangFlow"
-              className="w-full border-0"
-              style={{ height: "calc(100vh - var(--header-height, 56px) - 9rem)", minHeight: 520 }}
-              allow="clipboard-read; clipboard-write"
-            />
-          </div>
-        )}
+          ) : (
+            <div className="mt-7 rounded-lg bg-muted/50 p-4 text-sm text-muted-foreground">
+              <Bot className="mx-auto mb-2 size-5" />
+              LangFlow URL not configured. Set{" "}
+              <code className="rounded bg-muted px-1 text-xs">VITE_LANGFLOW_URL</code>.
+            </div>
+          )}
+
+          <p className="mt-6 text-xs text-muted-foreground">
+            Tip: snap the LangFlow window to one side and the admin panel to the
+            other to work in both at once.
+          </p>
+        </div>
       </div>
     </BaseLayout>
   )
