@@ -26,6 +26,7 @@ const navGroups = [
     label: "Clients",
     items: [
       { title: "Discovery Forms", url: "/discovery",          icon: ClipboardList },
+      { title: "Change Requests", url: "/requests",           icon: MessageSquare },
       { title: "All Clients",     url: "/admin",              icon: Users },
       { title: "Invitations",     url: "/admin/invitations",  icon: UserPlus },
       { title: "Contacts",        url: "/admin/contacts",     icon: Users },
