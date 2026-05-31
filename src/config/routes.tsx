@@ -4,6 +4,7 @@ import { ProtectedRoute } from '@/components/ProtectedRoute'
 
 const AdminHome       = lazy(() => import('@/app/admin/page'))
 const LangFlow        = lazy(() => import('@/app/langflow/page'))
+const Integrations    = lazy(() => import('@/app/admin/integrations/page'))
 const Discovery       = lazy(() => import('@/app/discovery/page'))
 const AdminClient     = lazy(() => import('@/app/admin/clients/page'))
 const AdminReplies    = lazy(() => import('@/app/admin/replies/page'))
@@ -45,6 +46,7 @@ export const routes: RouteConfig[] = [
   { path: "/admin/analytics",        element: <ProtectedRoute><AdminAnalytics /></ProtectedRoute> },
   { path: "/admin/templates",        element: <ProtectedRoute><AdminTemplates /></ProtectedRoute> },
   { path: "/langflow",               element: <ProtectedRoute><LangFlow /></ProtectedRoute> },
+  { path: "/admin/integrations",     element: <ProtectedRoute><Integrations /></ProtectedRoute> },
   { path: "/discovery",              element: <ProtectedRoute><Discovery /></ProtectedRoute> },
 
   // Settings
