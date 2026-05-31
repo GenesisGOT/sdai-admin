@@ -23,6 +23,21 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
+// Detect the shared admin passcode token (JWT with sub="admin").
+function isAdminToken(token: string): boolean {
+  try {
+    const part = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+    return JSON.parse(atob(part)).sub === "admin";
+  } catch {
+    return false;
+  }
+}
+
+const ADMIN_USER: User = {
+  id: 0, email: "admin", company_name: "SD AI Solutions",
+  contact_name: "Admin", phone: null, is_active: true,
+};
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(() => localStorage.getItem("sdai_token"));
@@ -30,6 +45,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!token) { setLoading(false); return; }
+    // Admin passcode session — no customer record to validate
+    if (isAdminToken(token)) { setUser(ADMIN_USER); setLoading(false); return; }
     fetch(`${API_BASE}/api/v1/customers/me`, {
       headers: { Authorization: `Bearer ${token}` },
     })
