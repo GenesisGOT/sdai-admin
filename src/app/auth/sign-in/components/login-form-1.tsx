@@ -1,10 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { useNavigate } from "react-router-dom"
+import { Lock, Loader2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -15,43 +12,36 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-import { useAuth } from "@/context/AuthContext"
 
-const loginFormSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-})
-
-type LoginFormValues = z.infer<typeof loginFormSchema>
+const API_BASE = import.meta.env.VITE_API_URL ?? ""
 
 export function LoginForm1({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const { login } = useAuth()
-  const navigate = useNavigate()
+  const [passcode, setPasscode] = useState("")
   const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
 
-  const form = useForm<LoginFormValues>({
-    resolver: zodResolver(loginFormSchema),
-    defaultValues: { email: "", password: "" },
-  })
-
-  async function onSubmit(data: LoginFormValues) {
+  async function submit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!passcode.trim() || loading) return
     setError(null)
+    setLoading(true)
     try {
-      await login(data.email, data.password)
-      navigate("/admin")
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Login failed")
+      const res = await fetch(`${API_BASE}/api/v1/auth/admin-login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ passcode }),
+      })
+      if (!res.ok) throw new Error("Incorrect passcode")
+      const data = await res.json()
+      localStorage.setItem("sdai_token", data.access_token)
+      // Full reload so AuthContext picks up the new token, then land on /admin
+      window.location.href = "/admin"
+    } catch {
+      setError("Incorrect passcode. Please try again.")
+      setLoading(false)
     }
   }
 
@@ -59,62 +49,28 @@ export function LoginForm1({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Welcome back</CardTitle>
-          <CardDescription>Sign in to your SD AI dashboard</CardDescription>
+          <div className="mx-auto mb-2 flex size-12 items-center justify-center rounded-full bg-primary/10">
+            <Lock className="size-5 text-primary" />
+          </div>
+          <CardTitle className="text-xl">Admin Access</CardTitle>
+          <CardDescription>Enter the admin passcode to continue</CardDescription>
         </CardHeader>
         <CardContent>
-          {error && (
-            <div className="mb-4 rounded-md bg-destructive/10 border border-destructive/20 px-4 py-3 text-sm text-destructive">
-              {error}
-            </div>
-          )}
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-              <div className="grid gap-6">
-                <div className="grid gap-4">
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input type="email" placeholder="you@example.com" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Password</FormLabel>
-                        <FormControl>
-                          <Input type="password" placeholder="••••••••" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <Button
-                    type="submit"
-                    className="w-full cursor-pointer"
-                    disabled={form.formState.isSubmitting}
-                  >
-                    {form.formState.isSubmitting ? "Signing in..." : "Sign In"}
-                  </Button>
-                </div>
-                <div className="text-center text-sm">
-                  Don&apos;t have an account?{" "}
-                  <a href="/auth/sign-up" className="underline underline-offset-4">
-                    Sign up
-                  </a>
-                </div>
-              </div>
-            </form>
-          </Form>
+          <form onSubmit={submit} className="flex flex-col gap-4">
+            <Input
+              type="password"
+              inputMode="numeric"
+              autoFocus
+              placeholder="Passcode"
+              value={passcode}
+              onChange={e => setPasscode(e.target.value)}
+              className="text-center tracking-widest"
+            />
+            {error && <p className="text-sm text-destructive text-center">{error}</p>}
+            <Button type="submit" disabled={loading || !passcode.trim()} className="w-full">
+              {loading ? <Loader2 className="size-4 animate-spin" /> : "Enter"}
+            </Button>
+          </form>
         </CardContent>
       </Card>
     </div>
